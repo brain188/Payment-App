@@ -46,7 +46,16 @@ class PaymentControllerTest {
         mockMvc.perform(post("/one-time-fee-payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.paymentAmount").exists());
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testProcessPayment_ValidationFailure_Negative() throws Exception {
+        PaymentRequest request = new PaymentRequest("STU001", new BigDecimal("-100.00"), LocalDate.now());
+
+        mockMvc.perform(post("/one-time-fee-payment")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
     }
 }

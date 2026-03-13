@@ -33,9 +33,13 @@ public class StudentAccountRepository {
         return Optional.ofNullable(accounts.get(studentNumber));
     }
 
-    // Saves or updates a student account.
+    /**
+     * Saves or updates a student account in the in-memory map.
+     * @param account The StudentAccount to save.
+     */
     public void save(StudentAccount account) {
         logger.debug("Saving account for student number: {}", account.getStudentNumber());
         accounts.put(account.getStudentNumber(), account);
     }
+
 }

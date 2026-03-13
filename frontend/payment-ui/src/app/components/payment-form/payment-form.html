@@ -1,0 +1,72 @@
+<div class="form-wrapper">
+  <div class="form-container">
+    <div class="header">
+      <h1 class="title">Student Fee Payment</h1>
+      <p class="subtitle">Process one-time fee payments quickly and securely</p>
+    </div>
+
+    <!-- Error/Success States -->
+    <div *ngIf="errorMessage" class="alert alert-error animate-fade-in">
+      <i class="ri-error-warning-line"></i>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <div class="card shadow-xl" *ngIf="!paymentResult">
+      <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" class="payment-form">
+        
+        <div class="form-group">
+          <label for="studentNumber">Student Number <span class="required">*</span></label>
+          <input 
+            id="studentNumber" 
+            type="text" 
+            formControlName="studentNumber" 
+            placeholder="Enter student number"
+            [class.invalid]="(paymentForm.get('studentNumber')?.touched || submitted) && paymentForm.get('studentNumber')?.invalid"
+          >
+          <div *ngIf="(paymentForm.get('studentNumber')?.touched || submitted) && paymentForm.get('studentNumber')?.invalid" class="inner-error">
+            Student number is required.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="paymentAmount">Payment Amount <span class="required">*</span></label>
+          <div class="input-with-icon">
+            <span class="currency-symbol">XAF</span>
+            <input 
+              id="paymentAmount" 
+              type="number" 
+              step="0.01" 
+              min="0.01"
+              formControlName="paymentAmount" 
+              placeholder="0.00"
+            [class.invalid]="(paymentForm.get('paymentAmount')?.touched || submitted) && paymentForm.get('paymentAmount')?.invalid"
+          >
+        </div>
+        <div *ngIf="(paymentForm.get('paymentAmount')?.touched || submitted) && paymentForm.get('paymentAmount')?.invalid" class="inner-error">
+            Valid payment amount (> 0) is required.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="paymentDate">Payment Date <span class="optional">(Optional)</span></label>
+          <div class="date-input-wrapper">
+            <input 
+              id="paymentDate" 
+              type="date" 
+              formControlName="paymentDate"
+              class="stylish-calendar"
+              [max]="today"
+            >
+            <p class="help-text">Leave empty to use today's date</p>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" [disabled]="isLoading">
+          <i [class]="isLoading ? 'ri-loader-4-line ri-spin' : 'ri-secure-payment-line'"></i>
+          {{ isLoading ? 'Processing...' : 'Process Payment' }}
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>

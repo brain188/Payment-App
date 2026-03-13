@@ -1,0 +1,146 @@
+<div class="app-wrapper">
+  
+  <!-- Landing Page -->
+  <div *ngIf="view === 'landing'" class="landing-container animate-fade-in">
+    
+    <header class="hero-section">
+      <h1 class="hero-title">Student Payment Portal</h1>
+      <p class="hero-subtitle">
+        Manage your student fee payments with ease. Process one-time payments securely and track your balance in real-time.
+      </p>
+    </header>
+
+    <!-- Features Grid -->
+    <section class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon-wrapper bg-teal-soft">
+          <i class="ri-secure-payment-line text-teal-accent"></i>
+        </div>
+        <h3 class="feature-title">Secure Payments</h3>
+        <p class="feature-text">
+          Process your fee payments securely with our encrypted payment system. Your financial information is always protected.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrapper bg-emerald-soft">
+          <i class="ri-gift-line text-emerald-accent"></i>
+        </div>
+        <h3 class="feature-title">Incentive Rewards</h3>
+        <p class="feature-text">
+          Earn incentives on your payments automatically. The more you pay, the more you save on your outstanding balance.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrapper bg-amber-soft">
+          <i class="ri-time-line text-amber-accent"></i>
+        </div>
+        <h3 class="feature-title">Instant Processing</h3>
+        <p class="feature-text">
+          Get immediate confirmation and updated balance information. Track your payment history and upcoming due dates.
+        </p>
+      </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="cta-banner">
+      <h2 class="cta-title">Ready to Make a Payment?</h2>
+      <p class="cta-subtitle">
+        Start processing your one-time fee payment now. It only takes a few seconds to complete.
+      </p>
+      <button (click)="showPortal()" class="cta-button">
+        <i class="ri-arrow-right-circle-line"></i>
+        Go to Payment Portal
+      </button>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon-wrapper bg-slate-soft">
+          <i class="ri-question-line text-slate-accent"></i>
+        </div>
+        <h3 class="feature-title">How does the incentive work?</h3>
+        <p class="feature-text">
+          When you make a payment, an incentive rate is automatically applied based on your payment amount. This incentive is deducted from your new balance, helping you save money.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrapper bg-slate-soft">
+          <i class="ri-shield-check-line text-slate-accent"></i>
+        </div>
+        <h3 class="feature-title">Is my payment information secure?</h3>
+        <p class="feature-text">
+          Yes, all payment transactions are encrypted and processed through secure channels. We never store sensitive payment information on our servers.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <!-- portal View -->
+  <div *ngIf="view === 'portal'" class="portal-view">
+    <nav class="portal-nav">
+      <button (click)="showLanding()" class="btn-back">
+        <i class="ri-arrow-left-line"></i> Back home
+      </button>
+    </nav>
+    <app-payment-form (paymentSuccess)="handlePaymentSuccess($event)"></app-payment-form>
+  </div>
+
+  <!-- Results View -->
+  <div *ngIf="view === 'result' && lastResult" class="results-container animate-fade-in">
+    <div class="results-card">
+      <div class="results-header">
+        <div class="success-check">
+          <i class="ri-checkbox-circle-fill"></i>
+        </div>
+        <h2 class="results-title">Payment Successful!</h2>
+        <p class="results-subtitle">Thank you for your payment. Your transaction has been processed.</p>
+      </div>
+
+      <div class="receipt-section">
+        <div class="receipt-item">
+          <span class="label">Transaction Reference</span>
+          <span class="value font-mono">TXN-{{ lastResult.studentNumber }}-{{ today | date:'ddMMyy' }}</span>
+        </div>
+        <div class="divider"></div>
+        <div class="receipt-item">
+          <span class="label">Student Number</span>
+          <span class="value">{{ lastResult.studentNumber }}</span>
+        </div>
+        <div class="receipt-item">
+          <span class="label">Previous Balance</span>
+          <span class="value" [class.negative]="lastResult.previousBalance < 0">FCFA {{ abs(lastResult.previousBalance) | number:'1.0-2' }}</span>
+        </div>
+        <div class="receipt-item highlight">
+          <span class="label">Payment Amount</span>
+          <span class="value text-teal">FCFA {{ lastResult.paymentAmount | number:'1.0-2' }}</span>
+        </div>
+        <div class="receipt-item highlight" *ngIf="lastResult.incentiveAmount > 0">
+          <span class="label">Incentive Applied ({{ lastResult.incentiveRate | percent }})</span>
+          <span class="value text-emerald">FCFA {{ lastResult.incentiveAmount | number:'1.0-2' }}</span>
+        </div>
+        <div class="divider"></div>
+        <div class="receipt-item total">
+          <span class="label">New Balance</span>
+          <span class="value" [class.negative]="lastResult.newBalance < 0">FCFA {{ abs(lastResult.newBalance) | number:'1.0-2' }}</span>
+        </div>
+        <div class="receipt-item">
+          <span class="label">Next Due Date</span>
+          <span class="value">{{ lastResult.nextDueDate | date:'fullDate' }}</span>
+        </div>
+      </div>
+
+      <div class="results-actions">
+        <button (click)="showPortal()" class="btn-action primary">
+          <i class="ri-add-line"></i> Make Another Payment
+        </button>
+        <button (click)="showLanding()" class="btn-action secondary">
+          <i class="ri-home-4-line"></i> Return Home
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
