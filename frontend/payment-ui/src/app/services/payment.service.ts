@@ -15,11 +15,9 @@ export class PaymentService {
 
   constructor(private http: HttpClient) { }
 
-  /**
-   * Processes a fee payment by sending a POST request to the backend.
-   * @param request The payment details including student number and amount.
-   * @returns An Observable of the payment success response.
-   */
+  
+  // Processes a fee payment by sending a POST request to the backend.
+   
   processPayment(request: PaymentRequest): Observable<PaymentResponse> {
     return this.http.post<PaymentResponse>(this.apiUrl, request);
   }

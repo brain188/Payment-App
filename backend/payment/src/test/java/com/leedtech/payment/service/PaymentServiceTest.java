@@ -70,7 +70,7 @@ class PaymentServiceTest {
 
     @Test
     void testNextDueDate_Weekday() {
-        // Thursday, March 12, 2026 -> + 90 days -> Wednesday, June 10, 2026 (No adjustment)
+        // Thursday, March 12, 2026 -> + 90 days -> Wednesday, June 10, 2026
         LocalDate startDate = LocalDate.of(2026, 3, 12);
         PaymentRequest request = new PaymentRequest("STU001", new BigDecimal("1000.00"), startDate);
         PaymentResponse response = paymentService.processPayment(request);
@@ -80,10 +80,8 @@ class PaymentServiceTest {
 
     @Test
     void testNextDueDate_SaturdayAdjustment() {
-        // Saturday, April 4, 2026 -> + 90 days -> Friday, July 3, 2026 
-        // Wait, example 2 says: April 5, 2026 (Sunday) + 90 days -> July 4, 2026 (Saturday) -> July 6, 2026 (Monday)
-        // Let's use the example from document
-        LocalDate startDate = LocalDate.of(2026, 4, 5); 
+        // Saturday, April 4, 2026 -> + 90 days -> Friday, July 3, 2026
+        LocalDate startDate = LocalDate.of(2026, 4, 5);
         PaymentRequest request = new PaymentRequest("STU001", new BigDecimal("575000.00"), startDate);
         PaymentResponse response = paymentService.processPayment(request);
 
@@ -93,7 +91,8 @@ class PaymentServiceTest {
 
     @Test
     void testNextDueDate_SundayAdjustment() {
-        // Monday, April 6, 2026 + 90 days = Sunday, July 5, 2026 -> Should move to Monday July 6.
+        // Monday, April 6, 2026 + 90 days = Sunday, July 5, 2026 -> Should move to
+        // Monday July 6.
         LocalDate startDate = LocalDate.of(2026, 4, 6);
         PaymentRequest request = new PaymentRequest("STU001", new BigDecimal("1000.00"), startDate);
         PaymentResponse response = paymentService.processPayment(request);
